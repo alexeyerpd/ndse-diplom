@@ -39,8 +39,12 @@ function deleteImgIfNotEmptyPath(req, filePath) {
     if (!filePath) return;
 
     try {
-        fs.unlinkSync(path.join(req.rootPublicDir, filePath));
-        return true;
+        const joinedPath = path.join(req.rootPublicDir, filePath);
+        if (fs.existsSync(joinedPath)) {
+            fs.unlinkSync(joinedPath);
+            return true;
+        }
+        return false;
     } catch (e) {
         throw new Error('failed to delete');
     }
